@@ -6,6 +6,7 @@ public class Spawner : MonoBehaviour
 {
     [Header("Attributes")]
     [SerializeField] private int spawn_rate = 0;
+    [SerializeField] private int throughput = 0;
 
     // Start is called before the first frame update
     void Start()
