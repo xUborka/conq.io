@@ -33,10 +33,12 @@ public class InputHandler : MonoBehaviour
             Vector3 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mouse_pos_2d = new Vector2(mouse_pos.x, mouse_pos.y);
             RaycastHit2D raycastHit = Physics2D.Raycast(mouse_pos_2d, Vector2.zero);
-            if (raycastHit.collider != null && raycastHit.transform != null)
+            if (raycastHit.collider != null && raycastHit.transform != null && raycastHit.transform.gameObject != start_node)
             {
                 end_node = raycastHit.transform.gameObject;
-                start_node.GetComponent<Spawner>().send_target = end_node;
+                if (end_node.layer == LayerMask.NameToLayer("Circles")){
+                    start_node.GetComponent<Spawner>().send_target = end_node;
+                }
             }
         }
 
@@ -48,18 +50,21 @@ public class InputHandler : MonoBehaviour
             if (end_node == null && start_node != null){
                 lineRenderer.SetPosition(0, new Vector3(start_node.transform.position.x, start_node.transform.position.y, 10));
                 lineRenderer.SetPosition(1, new Vector3(start_node.transform.position.x, start_node.transform.position.y, 10));
+                start_node.GetComponent<Spawner>().send_target = null;
                 start_node = null;
             }
         }
 
         if (start_node != null){
-            lineRenderer = start_node.GetComponentInChildren<LineRenderer>();
-            lineRenderer.SetPosition(0, new Vector3(start_node.transform.position.x, start_node.transform.position.y, 10));
-            if (end_node == null){
-                Vector2 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                lineRenderer.SetPosition(1, new Vector3(mouse_position.x, mouse_position.y, 10));
-            } else {
-                lineRenderer.SetPosition(1, new Vector3(end_node.transform.position.x, end_node.transform.position.y, 10));
+            if (!start_node.GetComponent<Spawner>().menu_displayed){
+                lineRenderer = start_node.GetComponentInChildren<LineRenderer>();
+                lineRenderer.SetPosition(0, new Vector3(start_node.transform.position.x, start_node.transform.position.y, 10));
+                if (end_node == null){
+                    Vector2 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    lineRenderer.SetPosition(1, new Vector3(mouse_position.x, mouse_position.y, 10));
+                } else {
+                    lineRenderer.SetPosition(1, new Vector3(end_node.transform.position.x, end_node.transform.position.y, 10));
+                }
             }
         } else {
             lineRenderer = null;
