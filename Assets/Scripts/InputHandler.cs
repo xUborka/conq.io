@@ -9,10 +9,13 @@ public class InputHandler : MonoBehaviour
     public GameObject end_node;
     public LineRenderer lineRenderer;
 
+    private bool blocked;
+
     void Start()
     {
         start_node = null;
         end_node = null;
+        blocked = false;
     }
 
     // Update is called once per frame
@@ -33,7 +36,7 @@ public class InputHandler : MonoBehaviour
             Vector3 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mouse_pos_2d = new Vector2(mouse_pos.x, mouse_pos.y);
             RaycastHit2D raycastHit = Physics2D.Raycast(mouse_pos_2d, Vector2.zero);
-            if (raycastHit.collider != null && raycastHit.transform != null && raycastHit.transform.gameObject != start_node)
+            if (raycastHit.collider != null && raycastHit.transform != null && raycastHit.transform.gameObject != start_node && start_node != null && !blocked)
             {
                 end_node = raycastHit.transform.gameObject;
                 if (end_node.layer == LayerMask.NameToLayer("Circles")){
@@ -62,6 +65,17 @@ public class InputHandler : MonoBehaviour
                 if (end_node == null){
                     Vector2 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     lineRenderer.SetPosition(1, new Vector3(mouse_position.x, mouse_position.y, 10));
+                    LayerMask mask = LayerMask.GetMask("Wall");
+                    RaycastHit2D hitInfo = Physics2D.Linecast(lineRenderer.GetPosition(0), lineRenderer.GetPosition(1), mask);
+                    if (hitInfo){
+                        lineRenderer.startColor = Color.red;
+                        lineRenderer.endColor = Color.red;
+                        blocked = true;
+                    } else {
+                        lineRenderer.startColor = Color.green;
+                        lineRenderer.endColor = Color.green;
+                        blocked = false;
+                    }
                 } else {
                     lineRenderer.SetPosition(1, new Vector3(end_node.transform.position.x, end_node.transform.position.y, 10));
                 }

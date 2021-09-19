@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Pathfinding;
 using TMPro;
 using UnityEngine;
 
@@ -28,21 +29,13 @@ public class Spawner : MonoBehaviour
     private bool count_menu;
     public bool menu_displayed;
 
-    public int get_owner(){
-        return owner;
-    }
-
-    public void set_owner(int o){
-        owner = o;
-    }
-
-    public void update_spawned_units(int value){
-        spawned_units += value;
-    }
-
-    public int get_spawned_units(){
-        return spawned_units;
-    }
+    public int Spawn_rate { get => spawn_rate; set => spawn_rate = value; }
+    public float Spawn_speed { get => spawn_speed; set => spawn_speed = value; }
+    public float Send_speed { get => send_speed; set => send_speed = value; }
+    public int Throughput { get => throughput; set => throughput = value; }
+    public int Spawned_units { get => spawned_units; set => spawned_units = value; }
+    public int Owner { get => owner; set => owner = value; }
+    public float Menu_speed { get => menu_speed; set => menu_speed = value; }
 
     void OnMouseDown(){
         count_menu = true;
@@ -55,7 +48,7 @@ public class Spawner : MonoBehaviour
             if (raycastHit.collider != null && raycastHit.transform != null)
             {
                 if (raycastHit.transform.gameObject.name == "Left_SpawnRate"){
-                    spawn_rate += 1;
+                    Spawn_rate += 1;
                 }
                 if (raycastHit.transform.gameObject.name == "Right_Throughput"){
                     throughput += 1;
@@ -77,7 +70,7 @@ public class Spawner : MonoBehaviour
         count_menu = false;
         menu_displayed = false;
         lineRenderer.positionCount = 2;
-        spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{spawned_units}");
+        spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{Spawned_units}");
         spawned_units_text.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
     }
 
@@ -98,34 +91,35 @@ public class Spawner : MonoBehaviour
             }
         }
 
-        if (spawn_timer >= spawn_speed)
+        if (spawn_timer >= Spawn_speed)
         {
-            spawn_timer -= spawn_speed;
-            spawned_units += spawn_rate;
+            spawn_timer -= Spawn_speed;
+            Spawned_units += Spawn_rate;
         }
 
-        if (menu_timer >= menu_speed)
+        if (menu_timer >= Menu_speed)
         {
             menu_object.transform.localScale = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(1, 1, 1), menu_timer * 1.3f);
             menu_displayed = true;
         }
 
-        if (send_timer >= send_speed)
+        if (send_timer >= Send_speed)
         {
-            send_timer -= send_speed;
-            if (send_target != null && spawned_units >= throughput)
+            send_timer -= Send_speed;
+            if (send_target != null && Spawned_units >= throughput)
             {
                 GameObject new_projectile = Instantiate(projectile, new Vector3(transform.position.x, transform.position.y, 5), Quaternion.identity);
                 new_projectile.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
                 ProjectileScript projectile_attributes = new_projectile.GetComponent<ProjectileScript>();
-                projectile_attributes.owner = owner;
+                projectile_attributes.owner = Owner;
+                projectile_attributes.units = Spawned_units;
+                print($"init: {projectile_attributes.units}");
                 projectile_attributes.end = send_target;
-                projectile_attributes.units = throughput;
-                spawned_units -= throughput;
+                Spawned_units = 0;
                 projectile_attributes.started = true;
             }
         }
 
-        spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{spawned_units}");
+        spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{Spawned_units}");
     }
 }
