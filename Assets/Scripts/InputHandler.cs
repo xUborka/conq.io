@@ -27,7 +27,7 @@ public class InputHandler : MonoBehaviour
             Vector3 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mouse_pos_2d = new Vector2(mouse_pos.x, mouse_pos.y);
             RaycastHit2D raycastHit = Physics2D.Raycast(mouse_pos_2d, Vector2.zero);
-            if (raycastHit.collider != null && raycastHit.transform != null)
+            if (raycastHit.collider != null && raycastHit.transform != null && raycastHit.transform.GetComponent<Spawner>().Owner == 1)
             {
                 start_node = raycastHit.transform.gameObject;
             }

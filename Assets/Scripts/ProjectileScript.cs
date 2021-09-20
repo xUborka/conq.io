@@ -21,17 +21,14 @@ public class ProjectileScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print(transform.position.z);
         speed = 1f;
         timer = 0.0f;
         spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{units}");
-        print($"start {units}");
     }
 
     // Update is called once per frame
     void Update()
     {
-        print(units);
         spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{units}");
         if (started){
             timer += Time.deltaTime;
@@ -50,6 +47,7 @@ public class ProjectileScript : MonoBehaviour
                 if (target_spawner.Spawned_units < 0) {
                     target_spawner.Spawned_units += 2 * Mathf.Abs(target_spawner.Spawned_units);
                     target_spawner.Owner = owner;
+                    target_spawner.ResetLineRenderer();
                     end.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
                 }
                 Destroy(gameObject);

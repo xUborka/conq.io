@@ -41,6 +41,12 @@ public class Spawner : MonoBehaviour
         count_menu = true;
     }
 
+    public void ResetLineRenderer(){
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, transform.position);
+        send_target = null;
+    }
+
     void OnMouseUp(){
         if (menu_displayed){
             Vector3 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -108,12 +114,13 @@ public class Spawner : MonoBehaviour
             send_timer -= Send_speed;
             if (send_target != null && Spawned_units >= throughput)
             {
+                GameObject parent = GameObject.Find("Projectiles");
                 GameObject new_projectile = Instantiate(projectile, new Vector3(transform.position.x, transform.position.y, 5), Quaternion.identity);
+                new_projectile.transform.parent = parent.transform;
                 new_projectile.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
                 ProjectileScript projectile_attributes = new_projectile.GetComponent<ProjectileScript>();
                 projectile_attributes.owner = Owner;
                 projectile_attributes.units = Spawned_units;
-                print($"init: {projectile_attributes.units}");
                 projectile_attributes.end = send_target;
                 Spawned_units = 0;
                 projectile_attributes.started = true;
