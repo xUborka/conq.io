@@ -128,5 +128,6 @@ public class Spawner : MonoBehaviour
         }
 
         spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{Spawned_units}");
+        spawned_units_text.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
     }
 }
