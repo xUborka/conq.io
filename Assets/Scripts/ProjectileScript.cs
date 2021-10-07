@@ -47,7 +47,6 @@ public class ProjectileScript : MonoBehaviour
                 if (target_spawner.Spawned_units < 0) {
                     target_spawner.Spawned_units += 2 * Mathf.Abs(target_spawner.Spawned_units);
                     target_spawner.Owner = owner;
-                    target_spawner.ResetLineRenderer();
                     end.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
                 }
                 Destroy(gameObject);
