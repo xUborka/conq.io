@@ -12,7 +12,6 @@ public class Spawner : MonoBehaviour
     [SerializeField] private int throughput = 1;
     [SerializeField] private int spawned_units = 0;
     [SerializeField] private int owner = 0;
-    [SerializeField] private float menu_speed = 0.5f;
 
     [Header("Links")]
     [SerializeField] private GameObject spawned_units_text;
@@ -20,40 +19,33 @@ public class Spawner : MonoBehaviour
     [SerializeField] public GameObject menu_object;
 
     private float spawn_timer;
-    private float menu_timer;
-
-    private bool count_menu;
-    public bool menu_displayed;
 
     public int Spawn_rate { get => spawn_rate; set => spawn_rate = value; }
     public float Spawn_speed { get => spawn_speed; set => spawn_speed = value; }
     public int Throughput { get => throughput; set => throughput = value; }
     public int Spawned_units { get => spawned_units; set => spawned_units = value; }
     public int Owner { get => owner; set => owner = value; }
-    public float Menu_speed { get => menu_speed; set => menu_speed = value; }
+
+    public void hide_menu(){
+        menu_object.GetComponent<UpgradeMenuScript>().Display = false;
+    }
 
     void OnMouseDown(){
-        count_menu = true;
     }
 
     void OnMouseUp(){
-        if (menu_displayed){
-            Vector3 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(mouse_pos.x, mouse_pos.y), Vector2.zero);
-            if (raycastHit.collider != null && raycastHit.transform != null)
-            {
-                if (raycastHit.transform.gameObject.name == "Left_SpawnRate"){
-                    Spawn_rate += 1;
-                }
-                if (raycastHit.transform.gameObject.name == "Right_Throughput"){
-                    throughput += 1;
-                }
+        Vector3 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mouse_pos_2d = new Vector2(mouse_pos.x, mouse_pos.y);
+        RaycastHit2D raycastHit = Physics2D.Raycast(mouse_pos_2d, Vector2.zero);
+        if (raycastHit.transform != null &&
+            raycastHit.transform.gameObject == this.transform.gameObject && 
+            owner == 1)
+        {
+            menu_object.GetComponent<UpgradeMenuScript>().Display = !menu_object.GetComponent<UpgradeMenuScript>().Display;
+            if (spawn_rate >= 5){
+                menu_object.GetComponent<UpgradeMenuScript>().Display = false;
             }
         }
-        count_menu = false;
-        menu_timer = 0.0f;
-        menu_object.transform.localScale = new Vector3(0, 0, 1);
-        menu_displayed = false;
     }
 
     public void send_projectile_to_target(GameObject target)
@@ -77,9 +69,6 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         spawn_timer = 0.0f;
-        menu_timer = 0.0f;
-        count_menu = false;
-        menu_displayed = false;
         spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{Spawned_units}");
         spawned_units_text.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
     }
@@ -89,27 +78,10 @@ public class Spawner : MonoBehaviour
     {
         spawn_timer += Time.deltaTime;
 
-        if (count_menu){
-            Vector3 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(mouse_pos.x, mouse_pos.y), Vector2.zero);
-            if (raycastHit.collider != null && raycastHit.transform != null)
-            {
-                if (gameObject == raycastHit.transform.gameObject){
-                    menu_timer += Time.deltaTime;
-                }
-            }
-        }
-
         if (spawn_timer >= Spawn_speed)
         {
             spawn_timer -= Spawn_speed;
             Spawned_units += Spawn_rate;
-        }
-
-        if (menu_timer >= Menu_speed)
-        {
-            menu_object.transform.localScale = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(1, 1, 1), menu_timer * 1.3f);
-            menu_displayed = true;
         }
 
         spawned_units_text.GetComponent<TextMeshProUGUI>().SetText($"{Spawned_units}");
