@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MapHandler : MonoBehaviour
 {
     [Header("Links")]
     [SerializeField] private GameObject circle_prefab;
+    [SerializeField] private GameObject circles;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +30,16 @@ public class MapHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        bool found_enemy = false;
+        for (int i = 0; i < circles.transform.childCount; ++i){
+            GameObject current_circle = circles.transform.GetChild(i).gameObject;
+            if (current_circle.GetComponent<Spawner>().Owner == 2){
+                found_enemy = true;
+                break;
+            }
+        }
+        if (!found_enemy){
+            print("Won");
+        }
     }
 }

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Pathfinding;
 using TMPro;
 using UnityEngine;
 
@@ -8,6 +5,7 @@ public class Spawner : MonoBehaviour
 {
     [Header("Attributes")]
     [SerializeField] private int spawn_rate = 1;
+    [SerializeField] private int max_spawn_rate = 5;
     [SerializeField] private float spawn_speed = 1.0f;
     [SerializeField] private int throughput = 1;
     [SerializeField] private int spawned_units = 0;
@@ -42,7 +40,7 @@ public class Spawner : MonoBehaviour
             owner == 1)
         {
             menu_object.GetComponent<UpgradeMenuScript>().Display = !menu_object.GetComponent<UpgradeMenuScript>().Display;
-            if (spawn_rate >= 5){
+            if (spawn_rate >= max_spawn_rate){
                 menu_object.GetComponent<UpgradeMenuScript>().Display = false;
             }
         }
