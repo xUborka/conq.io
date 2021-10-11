@@ -660,6 +660,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   circle_prefab: {fileID: 2058954892147670572, guid: 936fde7d8a417164f8528ac34a07093c, type: 3}
+  circles: {fileID: 866726415}
 --- !u!1001 &1672200608
 PrefabInstance:
   m_ObjectHideFlags: 0
