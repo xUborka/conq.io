@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Pathfinding;
 using TMPro;
 using UnityEngine;
 
