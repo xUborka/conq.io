@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 public class PowerBarScript : MonoBehaviour
@@ -14,7 +13,6 @@ public class PowerBarScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print(my_text.transform.localPosition);
     }
 
     // Update is called once per frame
@@ -38,14 +36,14 @@ public class PowerBarScript : MonoBehaviour
                 enemy += current_projectile.units;
             }
         }
-        my_text.GetComponent<TextMeshProUGUI>().SetText($"{mine}");
-        en_text.GetComponent<TextMeshProUGUI>().SetText($"{enemy}");
+        my_text.GetComponent<Text>().text = $"{mine}";
+        en_text.GetComponent<Text>().text = $"{enemy}";
         mine /= mine + enemy;
         
         if (mine < 0.15f){
-            my_text.GetComponent<TextMeshProUGUI>().SetText("");
+            my_text.GetComponent<Text>().text = "";
         } else if (mine > 0.85f){
-            en_text.GetComponent<TextMeshProUGUI>().SetText("");
+            en_text.GetComponent<Text>().text = "";
         }
 
         slider.value = mine;
