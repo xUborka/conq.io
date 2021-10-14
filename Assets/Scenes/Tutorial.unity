@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 135685155}
   - component: {fileID: 135685154}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1392,7 +1392,7 @@ GameObject:
   - component: {fileID: 1801373252}
   - component: {fileID: 1801373251}
   m_Layer: 5
-  m_Name: TopBar
+  m_Name: PowerBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
